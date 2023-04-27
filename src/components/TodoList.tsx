@@ -9,6 +9,10 @@ interface Iprops {
   todos: TodoType[];
 }
 
+type ObjectIndexType = {
+  [key: string]: number | undefined;
+}
+
 const Container = styled.div`
   width: 100%;
 
@@ -101,17 +105,12 @@ const Container = styled.div`
   }
 `;
 
-type ObjectIndexType = {
-  [key: string]: number | undefined;
-}
-
 const TodoList: React.FC<Iprops> = ({ todos }) => {
   const getTodoColorNums = useCallback(() => {
     const colors: ObjectIndexType = {};
 
     todos.forEach((todo) => {
       const value = colors[todo.color];
-      console.log(value);
       if (value) {
         colors[`${todo.color}`] += 1;
       } else {
@@ -122,12 +121,16 @@ const TodoList: React.FC<Iprops> = ({ todos }) => {
     return colors;
     }, [todos],
   )
+
   const todoColorNums = useMemo(getTodoColorNums, [todos]);
+  if (!todoColorNums) {
+    return <></>
+  };
 
   return (
     <Container>
       <div className="todo-list-header">
-        <p className="todo-list-last-todo">
+        <div className="todo-list-last-todo">
           <div className="todo-list-header-colors">
             {
               Object.keys(todoColorNums).map((color, idx) => (
@@ -138,7 +141,7 @@ const TodoList: React.FC<Iprops> = ({ todos }) => {
               ))
             }
           </div>
-        </p>
+        </div>
         <ul className="todo-list">
           {todos.map((todo) => (
             <li className="todo-item" key={todo.id}>
