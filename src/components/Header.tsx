@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 
 import palette from '@/styles/palette';
 
@@ -12,13 +13,18 @@ const Container = styled.div`
   border-bottom: 1px solid ${palette.gray};
   h1 {
     font-size: 21px;
+    cursor: pointer;
   }
 `;
 
 const Header: React.FC = () => {
+  const router = useRouter();
+
   return (
     <Container>
-      <h1>TodoList!</h1>
+      <h1 onClick={() => { router.push('/') }}>
+        TodoList!
+      </h1>
     </Container>
   )
 }

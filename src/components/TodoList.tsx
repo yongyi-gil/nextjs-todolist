@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { TodoType } from '@/types/todo';
 import palette from '@/styles/palette';
 
-import { checkTodoAPI, deleteTodoApi } from '@/lib/api/todos';
+import { checkTodoAPI, deleteTodoAPI } from '@/lib/api/todos';
 
 import TrashIcon from '../../public/static/svg/ic_trash.svg';
 import CheckIcon from '../../public/static/svg/ic_check.svg';
@@ -152,7 +152,7 @@ const TodoList: React.FC<Iprops> = ({ todos }) => {
 
   const deleteTodo = async (id: number) => {
     try {
-      await deleteTodoApi(id);
+      await deleteTodoAPI(id);
       const newTodos = localTodos.filter((todo) => todo.id !== id);
 
       setLocalTodos(newTodos);
