@@ -1,8 +1,10 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import { TodoType } from '@/types/todo';
 import palette from '@/styles/palette';
+
+import { checkTodoAPI } from '@/lib/api/todos';
 
 import TrashIcon from '../../public/static/svg/ic_trash.svg';
 import CheckIcon from '../../public/static/svg/ic_check.svg';
@@ -130,10 +132,27 @@ const Container = styled.div`
 `;
 
 const TodoList: React.FC<Iprops> = ({ todos }) => {
+  const [ localTodos, setLocalTodos ] = useState(todos);
+  const checkTodo = async (id: number) => {
+    try {
+      await checkTodoAPI(id);
+      const newTodos = localTodos.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, checked: !todo.checked };
+        }
+        return todo;
+      });
+
+      setLocalTodos(newTodos);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   const getTodoColorNums = useCallback(() => {
     const colors: ObjectIndexType = {};
 
-    todos.forEach((todo) => {
+    localTodos.forEach((todo) => {
       const value = colors[todo.color];
       if (value) {
         colors[`${todo.color}`] += 1;
@@ -167,7 +186,7 @@ const TodoList: React.FC<Iprops> = ({ todos }) => {
           </div>
         </div>
         <ul className="todo-list">
-          {todos.map((todo) => (
+          {localTodos.map((todo) => (
             <li className="todo-item" key={todo.id}>
               <div className="todo-left-side">
                 <div className={`todo-color-block bg-${todo.color}`} />
@@ -180,7 +199,12 @@ const TodoList: React.FC<Iprops> = ({ todos }) => {
                   todo.checked && (
                     <>
                       <TrashIcon className="todo-trash" onClick={() => {}} />
-                      <CheckIcon className="todo-check" onClick={() => {}} />
+                      <CheckIcon
+                        className="todo-check"
+                        onClick={() => {
+                          checkTodo(todo.id);
+                        }}
+                      />
                     </>
                   )
                 }
@@ -189,7 +213,9 @@ const TodoList: React.FC<Iprops> = ({ todos }) => {
                     <button
                       type="button"
                       className="todo-button"
-                      onClick={() => {}}
+                      onClick={() => {
+                        checkTodo(todo.id);
+                      }}
                     />
                   )
                 }
