@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import { TodoType } from '@/types/todo';
 import palette from '@/styles/palette';
 
+import TrashIcon from '../../public/static/svg/ic_trash.svg';
+import CheckIcon from '../../public/static/svg/ic_check.svg';
+
 // export하지 않는 타입에 대해서는 interface
 interface Iprops {
   todos: TodoType[];
@@ -99,6 +102,27 @@ const Container = styled.div`
             background-color: transparent;
             outline: none;
           }
+          
+          svg {
+            cursor: pointer;
+            &:first-child {
+              margin-right: 16px;
+            }
+          }
+
+          .todo-trash {
+            width: 16px;
+            path {
+              fill: ${palette.deep_red};
+            }
+          }
+
+          .todo-check {
+            width: 16px;
+            path {
+              fill: ${palette.deep_green};
+            }
+          }
         }
       }
     }
@@ -152,6 +176,14 @@ const TodoList: React.FC<Iprops> = ({ todos }) => {
                 </p>
               </div>
               <div className="todo-right-side">
+                {
+                  todo.checked && (
+                    <>
+                      <TrashIcon className="todo-trash" onClick={() => {}} />
+                      <CheckIcon className="todo-check" onClick={() => {}} />
+                    </>
+                  )
+                }
                 {
                   !todo.checked && (
                     <button
