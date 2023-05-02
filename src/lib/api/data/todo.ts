@@ -23,4 +23,8 @@ const write = async (todos: TodoType[]) => {
   writeFileSync('data/todos.json', JSON.stringify(todos));
 }
 
-export default { getList, exist, write };
+const remove = async (todos: TodoType[]) => {
+  writeFileSync('data/todos.json', JSON.stringify(todos));
+}
+
+export default { getList, exist, write, remove };

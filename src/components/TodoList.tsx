@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { TodoType } from '@/types/todo';
 import palette from '@/styles/palette';
 
-import { checkTodoAPI } from '@/lib/api/todos';
+import { checkTodoAPI, deleteTodoApi } from '@/lib/api/todos';
 
 import TrashIcon from '../../public/static/svg/ic_trash.svg';
 import CheckIcon from '../../public/static/svg/ic_check.svg';
@@ -97,6 +97,7 @@ const Container = styled.div`
           display: flex;
           margin-right: 12px;
           .todo-button {
+            cursor: pointer;
             width: 20px;
             height: 20px;
             border-radius: 50%;
@@ -142,6 +143,17 @@ const TodoList: React.FC<Iprops> = ({ todos }) => {
         }
         return todo;
       });
+
+      setLocalTodos(newTodos);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const deleteTodo = async (id: number) => {
+    try {
+      await deleteTodoApi(id);
+      const newTodos = localTodos.filter((todo) => todo.id !== id);
 
       setLocalTodos(newTodos);
     } catch (e) {
@@ -198,7 +210,12 @@ const TodoList: React.FC<Iprops> = ({ todos }) => {
                 {
                   todo.checked && (
                     <>
-                      <TrashIcon className="todo-trash" onClick={() => {}} />
+                      <TrashIcon
+                        className="todo-trash"
+                        onClick={() => {
+                          deleteTodo(todo.id);
+                        }}
+                      />
                       <CheckIcon
                         className="todo-check"
                         onClick={() => {

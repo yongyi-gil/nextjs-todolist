@@ -4,3 +4,5 @@ import { TodoType } from "@/types/todo";
 export const getTodosAPI = () => axios.get<TodoType[]>('api/todos');
 
 export const checkTodoAPI = (id: number) => axios.patch(`api/todos/${id}`);
+
+export const deleteTodoApi = (id: number) => axios.delete(`api/todos/${id}`);
